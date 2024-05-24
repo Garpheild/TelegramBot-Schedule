@@ -11,6 +11,11 @@ logging.basicConfig(filename=LOGS, level=logging.INFO,
 
 bot = TeleBot(get_telegram_token())
 
+def add_buttons(buttons):
+    keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+    keyboard.add(*buttons)
+    return keyboard
+  
 
 @bot.message_handler(commands=["start", "help"])
 def wellcome(message: types.Message):
@@ -83,6 +88,47 @@ def homework_hendler(message):
 @bot.message_handler(commands=["sent_homework"])
 def sent_homework(message: types.Message):
     #отправляется весь список домашнего задания с кнопками по которым
+
+
+#Добро пожаловать в говнокод
+@bot.message_handler(func=lambda message: message.text == "Получить дз")
+def send_homework(message):
+    chat_id = message.chat.id
+    db.insert_user_to_db(chat_id)
+
+    homework_list = [f"{index + 1}. {item}\n" for index, item in enumerate(db.get_data_from_db(chat_id, columns="homework")[0][0].split(','))]
+    homework = [i for i in homework_list if i != []]
+    if not homework:
+        bot.send_message(chat_id, "У вас нет домашнего задания")
+        return
+    bot.send_message(chat_id, "".join(homework))
+    bot.send_message(chat_id, "Чтобы убрать дз из списка введите его номер")
+    bot.register_next_step_handler(message, delete_homework)
+
+
+def delete_homework(message):
+    chat_id = message.chat.id
+    nums = list(range(1, len(db.get_data_from_db(chat_id, columns="homework")[0][0].split(',')) - 1))
+    if int(message.text) not in nums:
+        bot.send_message(chat_id, "Нет такого номера дз")
+        return
+    curr_hw = db.get_data_from_db(chat_id, columns="homework")[0][0].split(',')[:-1]
+    curr_hw.pop(int(message.text))
+    db.update_db(chat_id, columns=("homework",), values=("".join(curr_hw),))
+
+
+@bot.message_handler(func=lambda message: message.text == "Отправить дз")
+def get_homework(message):
+    bot.send_message(message.chat.id, "Отправьте дз через запятую")
+    bot.register_next_step_handler(message, add_homework_to_db)
+
+
+def add_homework_to_db(message):
+    db.insert_user_to_db(message.chat.id)
+    db.update_db(chat_id=message.chat.id, columns=("homework",), values=(message.text + ',',), replace=False)
+    bot.send_message(message.chat.id, "Дз получено")
+
+
 
 
 bot.polling()
