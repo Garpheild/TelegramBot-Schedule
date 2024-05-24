@@ -96,26 +96,30 @@ def send_homework(message):
     chat_id = message.chat.id
     db.insert_user_to_db(chat_id)
 
-    homework_list = [f"{index + 1}. {item}\n" for index, item in enumerate(db.get_data_from_db(chat_id, columns="homework")[0][0].split(','))]
-    homework = [i for i in homework_list if i != []]
-    if not homework:
+    if not db.get_data_from_db(chat_id, columns="homework")[0][0]:
         bot.send_message(chat_id, "У вас нет домашнего задания")
         return
-    bot.send_message(chat_id, "".join(homework))
+    
+    homework_list = [f"{index + 1}. {item}\n" for index, item in enumerate(db.get_data_from_db(chat_id, columns="homework")[0][0].split(',')) if item != ""]
+
+    bot.send_message(chat_id, "".join(homework_list))
     bot.send_message(chat_id, "Чтобы убрать дз из списка введите его номер")
     bot.register_next_step_handler(message, delete_homework)
 
 
 def delete_homework(message):
     chat_id = message.chat.id
-    nums = list(range(1, len(db.get_data_from_db(chat_id, columns="homework")[0][0].split(',')) - 1))
+    nums = range(1, len(db.get_data_from_db(chat_id, columns="homework")[0][0].split(',')) - 1)
+    print(nums)
     if int(message.text) not in nums:
         bot.send_message(chat_id, "Нет такого номера дз")
         return
     curr_hw = db.get_data_from_db(chat_id, columns="homework")[0][0].split(',')[:-1]
-    curr_hw.pop(int(message.text))
-    db.update_db(chat_id, columns=("homework",), values=("".join(curr_hw),))
-
+    print(curr_hw)
+    curr_hw.pop(int(message.text) - 1)
+    print(curr_hw)
+    db.update_db(chat_id, columns=("homework",), values=(",".join(curr_hw),))
+    bot.send_message(chat_id, f"Дз {message.text} удалено")
 
 @bot.message_handler(func=lambda message: message.text == "Отправить дз")
 def get_homework(message):
@@ -125,10 +129,8 @@ def get_homework(message):
 
 def add_homework_to_db(message):
     db.insert_user_to_db(message.chat.id)
-    db.update_db(chat_id=message.chat.id, columns=("homework",), values=(message.text + ',',), replace=False)
+    db.update_db(message.chat.id, columns=("homework",), values=(message.text + ',',), replace=False)
     bot.send_message(message.chat.id, "Дз получено")
-
-
 
 
 bot.polling()
