@@ -109,7 +109,7 @@ def send_homework(message):
 
 def delete_homework(message):
     chat_id = message.chat.id
-    nums = range(1, len(db.get_data_from_db(chat_id, columns="homework")[0][0].split(',')) - 1)
+    nums = range(1, len(db.get_data_from_db(chat_id, columns="homework")[0][0].split(',')))
     print(nums)
     if int(message.text) not in nums:
         bot.send_message(chat_id, "Нет такого номера дз")
@@ -131,6 +131,5 @@ def add_homework_to_db(message):
     db.insert_user_to_db(message.chat.id)
     db.update_db(message.chat.id, columns=("homework",), values=(message.text + ',',), replace=False)
     bot.send_message(message.chat.id, "Дз получено")
-
 
 bot.polling()
