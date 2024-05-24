@@ -1,0 +1,11 @@
+2024-05-24 18:08:16,848 FILE: bot.py IN: get_sent_schedule MESSAGE: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message text is empty
+2024-05-24 18:08:20,005 FILE: bot.py IN: get_sent_schedule MESSAGE: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message text is empty
+2024-05-24 18:08:22,649 FILE: bot.py IN: get_sent_schedule MESSAGE: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message text is empty
+2024-05-24 18:08:24,799 FILE: bot.py IN: get_sent_schedule MESSAGE: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message text is empty
+2024-05-24 18:08:27,082 FILE: bot.py IN: get_sent_schedule MESSAGE: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message text is empty
+2024-05-24 18:08:50,801 FILE: bot.py IN: notifications MESSAGE: Уведомления обновлены
+2024-05-24 18:08:52,620 FILE: bot.py IN: notifications MESSAGE: Уведомления обновлены
+2024-05-24 18:08:52,620 FILE: bot.py IN: notifications MESSAGE: Уведомления обновлены
+2024-05-24 18:08:55,182 FILE: bot.py IN: notifications MESSAGE: Уведомления обновлены
+2024-05-24 18:08:55,182 FILE: bot.py IN: notifications MESSAGE: Уведомления обновлены
+2024-05-24 18:08:55,182 FILE: bot.py IN: notifications MESSAGE: Уведомления обновлены
