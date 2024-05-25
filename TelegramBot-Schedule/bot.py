@@ -8,7 +8,7 @@ import threading
 import time
 
 from telebot import TeleBot, types
-from functions import get_telegram_token, is_time, is_appropriate_message
+from functions import get_creds, is_time, is_appropriate_message
 from config import *
 
 import gpt
@@ -17,7 +17,7 @@ import gpt
 logging.basicConfig(filename=LOGS, level=logging.INFO,
                     format="%(asctime)s FILE: %(filename)s IN: %(funcName)s MESSAGE: %(message)s", filemode="w")
 
-bot = TeleBot(get_telegram_token())
+bot = TeleBot(get_creds(TG_TOKEN))
 db.create_table()
 
 
