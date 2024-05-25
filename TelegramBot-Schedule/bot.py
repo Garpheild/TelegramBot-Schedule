@@ -274,18 +274,20 @@ def sent_homework(chat_id):
 def delete_homework(message):
     chat_id = message.chat.id
     try:
-        nums = range(1, len([i for i in db.get_data_from_db(chat_id, columns="homework")[0][0].split(',')[:-1] if i != ""]))
+        nums = range(1, len(db.get_data_from_db(chat_id, columns="homework")[0][0].split(',')))
+ 
         if int(message.text) not in nums:
-            bot.send_message(chat_id, "Нет такого номера дз", reply_markup=types.ReplyKeyboardRemove())
+            bot.send_message(chat_id, "Нет такого номера дз")
             return
-    except:
-        bot.send_message(chat_id, "Нет такого номера дз", reply_markup=types.ReplyKeyboardRemove())
-        return
-    curr_hw = [i for i in db.get_data_from_db(chat_id, columns="homework")[0][0].split(',')[:-1] if i != ""]
-    curr_hw.pop(int(message.text) - 1)
-    db.update_db(chat_id, columns=("homework",), values=(",".join(curr_hw) + ",",))
-    bot.send_message(chat_id, f"Дз {message.text} удалено", reply_markup=types.ReplyKeyboardRemove())
 
+        curr_hw = db.get_data_from_db(chat_id, columns="homework")[0][0].split(',')
+    except Exception:
+        bot.send_message(chat_id, "Нет такого номера дз")
+        return
+    
+    curr_hw.pop(int(message.text) - 1)
+    db.update_db(chat_id, columns=("homework",), values=(",".join(curr_hw),))
+    bot.send_message(chat_id, f"Дз {message.text} удалено🗑")
 
 @bot.message_handler(commands=["get_homework"])
 def get_homework(message):
