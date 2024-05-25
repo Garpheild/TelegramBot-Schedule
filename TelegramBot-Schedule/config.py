@@ -2,6 +2,13 @@ TG_TOKEN = "creds/telegram_token.txt"
 LOGS = "logs.txt"
 DB_FILE_NAME = "user_data.db"
 
+USER_GPT_TOKEN_LIMIT = 1000
+GPT_MAX_TOKENS = 100
+GPT_MODEL = "yandexgpt-lite"
+URL = "https://llm.api.cloud.yandex.net/foundationModels/v1/completion"
+FOLDER_ID = "creds/folder_id.txt"
+IAM_TOKEN = "creds/iam_token.txt"
+
 bot_answers = {
     "/start": "Добро пожаловать! Это бот - школьное расписание. В нём ты можешь хранить своё расписание "
               "на каждый школьный день, получать уведомление с напоминанием о дз и сохранять своё дз в чек-лист. Подробнее /help",
