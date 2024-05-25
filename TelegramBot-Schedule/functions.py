@@ -8,17 +8,17 @@ logging.basicConfig(filename=LOGS, level=logging.INFO,
                     format="%(asctime)s FILE: %(filename)s IN: %(funcName)s MESSAGE: %(message)s", filemode="w")
 
 
-def get_telegram_token():
-    if not os.path.exists(TG_TOKEN):
-        logging.critical(f"Файл {TG_TOKEN} не найден.")
+def get_creds(path):
+    if not os.path.exists(path):
+        logging.critical(f"Файл {path} не найден.")
         raise FileNotFoundError(f"Файл '{TG_TOKEN} не найден.")
     try:
-        with open(os.path.join(TG_TOKEN), "r") as file:
-            telegram_token = file.read().strip()
-            return telegram_token
+        with open(os.path.join(path), "r") as file:
+            creds = file.read().strip()
+            return creds
     except IOError as e:
-        logging.critical(f"Ошибка при чтении файла {TG_TOKEN}: {e}")
-        print(f"Ошибка при чтении файла {TG_TOKEN}: {e}")
+        logging.critical(f"Ошибка при чтении файла {path}: {e}")
+        print(f"Ошибка при чтении файла {path}: {e}")
 
 
 def is_time(text):
