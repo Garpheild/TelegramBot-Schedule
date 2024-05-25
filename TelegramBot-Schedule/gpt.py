@@ -1,6 +1,7 @@
 import logging
 import requests
 from config import GPT_MAX_TOKENS, URL, IAM_TOKEN, FOLDER_ID, GPT_MODEL
+from functions import get_creds
 
 def get_answer(text):
     headers = {
