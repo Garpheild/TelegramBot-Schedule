@@ -297,6 +297,15 @@ def add_homework_to_db(message):
     bot.send_message(message.chat.id, "Дз получено", reply_markup=types.ReplyKeyboardRemove())
 
 
+@bot.message_handler(commands=["GPT_help"])
+def GPT_help(message):
+  bot.sent_message(message.chat.id, "Введите своё задание, я попытаюсь его решить")
+  bot.register_next_step_handler(message, ask_gpt)
+
+
+
+
+
 def run_polling():
     try:
         bot.polling()
