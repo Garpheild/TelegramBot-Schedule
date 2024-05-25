@@ -2,15 +2,13 @@ import logging
 import requests
 from config import GPT_MAX_TOKENS, URL, IAM_TOKEN, FOLDER_ID, GPT_MODEL
 
-headers = {
-    'Authorization': f'Bearer {IAM_TOKEN}',
-    'Content-Type': 'application/json'
-}
-
-
 def get_answer(text):
+    headers = {
+        'Authorization': f'Bearer {get_creds(IAM_TOKEN)}',
+        'Content-Type': 'application/json'
+    }
     data = {
-        "modelUri": f"gpt://{FOLDER_ID}/{GPT_MODEL}",
+        "modelUri": f"gpt://{get_creds(FOLDER_ID)}/{GPT_MODEL}",
         "completionOptions": {
             "stream": False,
             "temperature": 0.6,
@@ -31,5 +29,4 @@ def get_answer(text):
         return response["result"]["alternatives"][0]["message"]["text"], int(response["result"]["usage"]["completionTokens"])
     else:
         logging.error(response)
-        return "Ошибка при генерации запроса"
-
+        return "Ошибка при генерации запроса", 0
