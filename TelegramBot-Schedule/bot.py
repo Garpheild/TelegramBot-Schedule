@@ -11,6 +11,8 @@ from telebot import TeleBot, types
 from functions import get_telegram_token, is_time, is_appropriate_message
 from config import *
 
+import gpt
+
 
 logging.basicConfig(filename=LOGS, level=logging.INFO,
                     format="%(asctime)s FILE: %(filename)s IN: %(funcName)s MESSAGE: %(message)s", filemode="w")
@@ -297,14 +299,31 @@ def add_homework_to_db(message):
     bot.send_message(message.chat.id, "Дз получено", reply_markup=types.ReplyKeyboardRemove())
 
 
-@bot.message_handler(commands=["GPT_help"])
-def GPT_help(message):
-  bot.sent_message(message.chat.id, "Введите своё задание, я попытаюсь его решить")
-  bot.register_next_step_handler(message, ask_gpt)
+@bot.message_handler(commands=["gpt_help"])
+def gpt_help(message):
+    bot.send_message(message.chat.id, "Введите вопрос для GPT")
+    bot.register_next_step_handler(message, gpt_handler)
+
+def gpt_handler(message):
+    if message.content_type != "text":
+        bot.send_message(message.chat.id, "Введите именно текст")
+        return
+    db.insert_user_to_db(message.chat.id)
+    curr_tokens = int(db.get_data_from_db(message.chat.id, "used_gpt_tokens")[0][0])
+
+    if curr_tokens < USER_GPT_TOKEN_LIMIT:
+        answer, used_tokens = gpt.get_answer(message.text)
+
+        bot.send_message(message.chat.id, answer)
+        db.update_db(message.chat.id, columns=("used_gpt_tokens",), values=(curr_tokens + used_tokens,))
+    
+    else:
+
+        bot.send_message(message.chat.id, "Вы исчерпали свой лимит токенов для GPT",)
 
 
 
-
+ 
 
 def run_polling():
     try:
