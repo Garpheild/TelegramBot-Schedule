@@ -16,7 +16,8 @@ def create_table():
             lesson TEXT,
             homework TEXT DEFAULT "",
             time_notification TEXT,
-            day_notification TEXT DEFAULT "");
+            day_notification TEXT DEFAULT "",
+            used_gpt_tokens INTEGER DEFAULT 0);
                 ''')
             con.commit()
     except Exception as e:
